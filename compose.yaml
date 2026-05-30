@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: dev
+      APP_SECRET: ${APP_SECRET:-change-me}

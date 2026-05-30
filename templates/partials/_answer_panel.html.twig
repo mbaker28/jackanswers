@@ -1,0 +1,19 @@
+<section class="answer-panel answer-panel--{{ status }}">
+    <p class="answer-kicker">
+        {% if status == 'seeded' %}
+            The answer is ready
+        {% elseif status == 'wild' %}
+            The answer is uncertain
+        {% elseif status == 'blocked' %}
+            The ritual failed
+        {% else %}
+            Waiting
+        {% endif %}
+    </p>
+
+    {% if question %}
+        <p class="answer-question">{{ question }}</p>
+    {% endif %}
+
+    <p class="answer-text">{{ answer }}</p>
+</section>

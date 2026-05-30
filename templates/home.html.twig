@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jack Answers{% endblock %}
+
+{% block body %}
+    <main class="app-shell" data-controller="oracle">
+        <section class="reader">
+            <div class="reader__header">
+                <p class="eyebrow">Jack Answers</p>
+                <h1>Consult Jack</h1>
+                <p class="lede">Enter a proper invocation, ask what is on your mind, and let Jack respond.</p>
+            </div>
+
+            <form
+                class="oracle-form"
+                action="{{ path('app_ask') }}"
+                method="post"
+                data-turbo-frame="reading-result"
+                data-action="turbo:submit-start->oracle#submit turbo:submit-end->oracle#finish"
+            >
+                <input type="hidden" name="_token" value="{{ csrf_token('ask_oracle') }}">
+                <input type="hidden" name="seeded_answer" data-oracle-target="secret">
+
+                <label class="field">
+                    <span>Invocation</span>
+                    <input
+                        name="petition"
+                        type="text"
+                        autocomplete="off"
+                        data-oracle-target="petition"
+                        data-action="beforeinput->oracle#capture input->oracle#sync keydown->oracle#shortcut"
+                        placeholder="Jack, reveal what I need to know"
+                    >
+                </label>
+
+                <label class="field">
+                    <span>Question</span>
+                    <input
+                        name="question"
+                        type="text"
+                        autocomplete="off"
+                        data-oracle-target="question"
+                        placeholder="What do you want to know?"
+                    >
+                </label>
+
+                <div class="actions">
+                    <button class="button button--primary" type="submit" data-oracle-target="submit">Ask</button>
+                    <button class="button button--ghost" type="button" data-action="oracle#reset">Reset</button>
+                </div>
+            </form>
+        </section>
+
+        <turbo-frame id="reading-result" data-oracle-target="result" data-idle-url="{{ path('app_answer_idle') }}">
+            {% include 'partials/_answer_panel.html.twig' with {
+                status: 'idle',
+                answer: 'Jack is waiting.',
+                question: ''
+            } only %}
+        </turbo-frame>
+    </main>
+{% endblock %}
